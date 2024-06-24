@@ -1,0 +1,39 @@
+.container {
+  text-align: center;
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  background: #333;
+  color: white;
+}
+
+.text-muted {
+  color: white!important;
+}
+
+.btn-group .btn {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-group .btn:hover {
+  color: #fff;
+  background-color: #0056b3;
+  border-color: #004085;
+}
