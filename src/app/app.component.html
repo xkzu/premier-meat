@@ -1,7 +1,5 @@
-<!-- Navbar en modo oscuro -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <!-- Cambiar el enlace de "Premier Meat" para que redirija a /home -->
     <a class="navbar-brand" [routerLink]="['/home']">Premier Meat</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -9,33 +7,33 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/home']" routerLinkActive="active">Home</a>
+          <a class="nav-link" [routerLink]="['/home']">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/products']" routerLinkActive="active">Productos</a>
+          <a class="nav-link" [routerLink]="['/products']">Productos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/contact']" routerLinkActive="active">Contacto</a>
+          <a class="nav-link" [routerLink]="['/contact']">Contacto</a>
         </li>
       </ul>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/register']">Registrar</a>
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        <li class="nav-item" *ngIf="!currentUser">
+          <a class="nav-link" [routerLink]="['/register']">Registrarse</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/login']">Login</a>
+        <li class="nav-item" *ngIf="!currentUser">
+          <a class="nav-link" [routerLink]="['/login']">Ingresar</a>
+        </li>
+        <li class="nav-item dropdown" *ngIf="currentUser">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ currentUser.username }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" [routerLink]="['/profile']">Perfil</a></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()">Cerrar Sesión</a></li>
+          </ul>
         </li>
       </ul>
     </div>
   </div>
 </nav>
-
-<!-- Contenido principal -->
 <router-outlet></router-outlet>
-
-<!-- Footer en modo oscuro -->
-<footer class="bg-dark text-center text-lg-start mt-5 text-white">
-  <div class="container p-4">
-    <p>&copy; 2024 Premier Meat. Todos los derechos reservados.</p>
-  </div>
-</footer>

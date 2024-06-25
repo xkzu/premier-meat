@@ -1,1 +1,29 @@
-<p>login works!</p>
+<div class="container mt-5 text-white">
+  <h1>Login</h1>
+  <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm" novalidate>
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo Electrónico</label>
+      <input type="email" class="form-control" id="email" name="email" ngModel required email placeholder="Ingrese su correo electrónico">
+      <div *ngIf="loginForm.submitted && loginForm.controls['email']?.errors?.['required']" class="text-danger">
+        El correo electrónico es requerido.
+      </div>
+      <div *ngIf="loginForm.submitted && loginForm.controls['email']?.errors?.['email']" class="text-danger">
+        Ingrese un correo electrónico válido.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña</label>
+      <input type="password" class="form-control" id="password" name="password" ngModel required minlength="8" placeholder="Ingrese su contraseña">
+      <div *ngIf="loginForm.submitted && loginForm.controls['password']?.errors?.['required']" class="text-danger">
+        La contraseña es requerida.
+      </div>
+      <div *ngIf="loginForm.submitted && loginForm.controls['password']?.errors?.['minlength']" class="text-danger">
+        La contraseña debe tener al menos 8 caracteres.
+      </div>
+    </div>
+    <div *ngIf="loginError" class="text-danger mb-3">
+      Correo electrónico o contraseña incorrectos.
+    </div>
+    <button type="submit" class="btn btn-primary">Ingresar</button>
+  </form>
+</div>
