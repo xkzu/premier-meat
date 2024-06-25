@@ -1,0 +1,23 @@
+<div class="container mt-5 text-white">
+  <h1>Carrito de Compras</h1>
+  <div *ngIf="cartItems.length === 0">
+    <p>Tu carrito está vacío.</p>
+  </div>
+  <div *ngIf="cartItems.length > 0">
+    <ul class="list-group mb-3">
+      <li *ngFor="let item of cartItems" class="list-group-item d-flex justify-content-between align-items-center">
+        {{ item.name }} - {{ item.price | customCurrency }} x {{ item.quantity }}
+        <div>
+          <button class="btn btn-sm btn-danger me-2" (click)="removeFromCart(item)">-</button>
+          <button class="btn btn-sm btn-success" (click)="addToCart(item)">+</button>
+        </div>
+      </li>
+    </ul>
+    <div class="d-flex justify-content-between">
+      <strong>Total: {{ getTotalPrice() | customCurrency }}</strong>
+      <button class="btn btn-success" (click)="showPaymentForm()">Pagar</button>
+    </div>
+  </div>
+
+  <app-payment-form *ngIf="isPaymentFormVisible" (paymentSubmitted)="handlePayment($event)" (modalClosed)="isPaymentFormVisible = false"></app-payment-form>
+</div>

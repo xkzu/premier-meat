@@ -1,0 +1,93 @@
+/* Ajustar el contenedor principal */
+.container {
+  text-align: center;
+  margin-top: 20px; /* Añadir un margen superior para espaciar el contenido */
+}
+
+/* Ajustar el carrusel para que no ocupe todo el espacio */
+.carousel {
+  /*height: calc(100vh - 100px); !* Ajustar la altura: estimar 70px para el navbar y 130px para el footer *!*/
+  margin-top: 0; /* Sin margen superior */
+  margin-bottom: 0; /* Sin margen inferior */
+  height: 50vh;
+}
+
+/* Ajustar las imágenes del carrusel */
+.carousel-inner img,
+.carousel-item img {
+  width: 100%;
+  /*height: calc(85vh - 200px); !* Ajustar la altura según el espacio disponible *!*/
+  height: 73vh;
+  object-fit: cover; /* Mantiene la proporción de la imagen */
+}
+
+/* Ajustar las leyendas */
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente para mejor lectura */
+  padding: 1rem;
+  border-radius: 10px; /* Añadir bordes redondeados */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); /* Añadir sombra de texto para mejor legibilidad */
+}
+
+/* Ajustar las flechas del carrusel */
+.carousel-control-prev,
+.carousel-control-next {
+  filter: invert(100%); /* Cambia el color de las flechas a blanco */
+  width: 50px; /* Aumenta el tamaño de las flechas */
+  height: 50px; /* Aumenta el tamaño de las flechas */
+  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  border-radius: 50%; /* Bordes redondeados para las flechas */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute; /* Posicionamiento absoluto para centrar verticalmente */
+  top: 50%; /* Centra verticalmente las flechas */
+  transform: translateY(-50%); /* Ajuste para centrar completamente */
+}
+
+.carousel-control-prev {
+  left: 20px; /* Posiciona la flecha izquierda */
+}
+
+.carousel-control-next {
+  right: 20px; /* Posiciona la flecha derecha */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 20px; /* Ajusta el tamaño del icono */
+  height: 20px; /* Ajusta el tamaño del icono */
+}
+
+/* Ajustar los indicadores del carrusel */
+.carousel-indicators [data-bs-target] {
+  background-color: white; /* Cambia el color de los indicadores a blanco */
+}
+
+/* Estilo para el texto en blanco */
+.text-white {
+  color: #f8f9fa; /* Asegurar que el texto sea de un blanco claro */
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .carousel-inner img {
+    height: 300px; /* Reduce la altura en pantallas más pequeñas */
+  }
+
+  .carousel-caption {
+    font-size: 0.9rem; /* Reduce el tamaño del texto en pantallas más pequeñas */
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 30px; /* Ajusta el tamaño de las flechas en pantallas pequeñas */
+    height: 30px;
+  }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    width: 15px; /* Ajusta el tamaño del icono en pantallas pequeñas */
+    height: 15px;
+  }
+}

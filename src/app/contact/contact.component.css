@@ -1,0 +1,27 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.form-label {
+  color: #fff;
+}
+
+.form-control {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+.form-control:focus {
+  background-color: #555;
+}
+
+.text-danger {
+  margin-top: 5px;
+  color: #dc3545;
+}
