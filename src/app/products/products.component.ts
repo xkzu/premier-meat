@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Product } from '../models/product'; // Asegúrate de que la ruta sea correcta
 
 @Component({
   selector: 'app-products',
@@ -6,8 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-
-  products = [
+  products: Product[] = [
     {
       name: 'Lomo Liso',
       description: 'Corte de carne de alta calidad.',
@@ -46,9 +47,50 @@ export class ProductsComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
+  addToCart(product: Product): void {
+    let cart: Product[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingProduct = cart.find((cartItem: Product) => cartItem.name === product.name);
+
+    if (existingProduct) {
+      existingProduct.quantity! += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  removeFromCart(product: Product): void {
+    let cart: Product[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const productIndex = cart.findIndex((cartItem: Product) => cartItem.name === product.name);
+
+    if (productIndex > -1) {
+      cart[productIndex].quantity! -= 1;
+      if (cart[productIndex].quantity! <= 0) {
+        cart.splice(productIndex, 1);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+
+  getProductQuantity(product: Product): number {
+    let cart: Product[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingProduct = cart.find((cartItem: Product) => cartItem.name === product.name);
+    return existingProduct ? existingProduct.quantity! : 0;
+  }
+
+  checkout(): void {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    if (!currentUser) {
+      alert('Debes iniciar sesión para comprar.');
+      this.router.navigate(['/login']);
+    } else {
+      this.router.navigate(['/cart']);
+    }
+  }
 }

@@ -2,48 +2,23 @@
   <h1>Registro</h1>
   <form (ngSubmit)="onSubmit(registerForm)" #registerForm="ngForm" novalidate>
     <div class="mb-3">
-      <label for="username" class="form-label">Nombre de Usuario</label>
-      <input type="text" class="form-control" id="username" name="username" ngModel required placeholder="Ingrese su nombre de usuario" (keyup)="onUsernameInput($event, registerForm)">
-      <div *ngIf="registerForm.submitted && registerForm.controls['username']?.errors?.['required']" class="text-danger">
-        El nombre de usuario es requerido.
-      </div>
-      <div *ngIf="usernameErrors?.['invalidUsername']" class="text-danger">
-        El nombre de usuario solo puede contener letras, números, guiones y guiones bajos.
-      </div>
-    </div>
-    <div class="mb-3">
       <label for="email" class="form-label">Correo Electrónico</label>
-      <input type="email" class="form-control" id="email" name="email" ngModel required email
-             placeholder="Ingrese su correo electrónico" (keyup)="onEmailInput($event, registerForm)">
-      <div *ngIf="emailErrors?.['required']" class="text-danger">
-        El correo electrónico es requerido.
-      </div>
-      <div *ngIf="emailErrors?.['email']" class="text-danger">
+      <input type="email" class="form-control" id="email" name="email" [(ngModel)]="email" (keyup)="validateEmail()" required email>
+      <div *ngIf="emailInvalid" class="text-danger">
         Ingrese un correo electrónico válido.
-      </div>
-      <div *ngIf="emailExistsError" class="text-danger">
-        El correo electrónico ya está registrado.
       </div>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña</label>
-      <input type="password" class="form-control" id="password" name="password" ngModel required minlength="8"
-             placeholder="Ingrese su contraseña" (keyup)="onPasswordInput($event, registerForm)">
-      <div *ngIf="passwordErrors?.['required']" class="text-danger">
-        La contraseña es requerida.
-      </div>
-      <div *ngIf="passwordErrors?.['minlength']" class="text-danger">
+      <input type="password" class="form-control" id="password" name="password" [(ngModel)]="password" (keyup)="validatePassword()" required minlength="8">
+      <div *ngIf="passwordInvalid" class="text-danger">
         La contraseña debe tener al menos 8 caracteres.
       </div>
     </div>
     <div class="mb-3">
       <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" ngModel required
-             placeholder="Confirme su contraseña" (keyup)="onConfirmPasswordInput($event, registerForm)">
-      <div *ngIf="confirmPasswordErrors?.['required']" class="text-danger">
-        La confirmación de la contraseña es requerida.
-      </div>
-      <div *ngIf="confirmPasswordErrors?.['passwordMismatch']" class="text-danger">
+      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" (keyup)="validatePassword()" required>
+      <div *ngIf="passwordsDoNotMatch" class="text-danger">
         Las contraseñas no coinciden.
       </div>
     </div>
