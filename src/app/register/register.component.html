@@ -1,6 +1,6 @@
 <div class="container mt-5 text-white">
   <h1>Registro</h1>
-  <form (ngSubmit)="onSubmit()" #registerForm="ngForm" novalidate>
+  <form (ngSubmit)="onSubmit(registerForm)" #registerForm="ngForm" novalidate>
     <div class="mb-3">
       <label for="email" class="form-label">Correo Electrónico</label>
       <input type="email" class="form-control" id="email" name="email" [(ngModel)]="email" (keyup)="validateEmail()" required email>
@@ -10,10 +10,7 @@
     </div>
     <div class="mb-3">
       <label for="username" class="form-label">Nombre de Usuario</label>
-      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" (keyup)="validateUsername()" required>
-      <div *ngIf="usernameInvalid" class="text-danger">
-        El nombre de usuario solo puede contener letras y números.
-      </div>
+      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="username" required>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña</label>

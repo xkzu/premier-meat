@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout() {
+  logout(): void {
     this.firebaseService.logout().then(() => {
       this.currentUser = null;
     });
