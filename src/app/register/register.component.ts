@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-register',
@@ -11,39 +12,38 @@ export class RegisterComponent {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
-
+  username: string = '';
   emailInvalid: boolean = false;
   passwordInvalid: boolean = false;
   passwordsDoNotMatch: boolean = false;
+  usernameInvalid: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private firebaseService: FirebaseService, private router: Router) {}
 
-  validateEmail(): void {
-    this.emailInvalid = !this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  validateEmail() {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    this.emailInvalid = !emailPattern.test(this.email);
   }
 
-  validatePassword(): void {
+  validatePassword() {
     this.passwordInvalid = this.password.length < 8;
     this.passwordsDoNotMatch = this.password !== this.confirmPassword;
   }
 
-  onSubmit(form: NgForm): void {
-    this.validateEmail();
-    this.validatePassword();
+  validateUsername() {
+    const usernamePattern = /^[a-zA-Z0-9]+$/;
+    this.usernameInvalid = !usernamePattern.test(this.username);
+  }
 
-    if (!this.emailInvalid && !this.passwordInvalid && !this.passwordsDoNotMatch) {
-      // Guardar el usuario y redirigir
-      let users = JSON.parse(localStorage.getItem('users') || '[]');
-      users.push({
-        email: this.email,
-        password: this.password,
-        role: 'user'
-      });
-      localStorage.setItem('users', JSON.stringify(users));
-      alert('Registro exitoso. Ahora puede iniciar sesión.');
-      this.router.navigate(['/login']);
-    } else {
-      alert('Por favor, corrija los errores en el formulario.');
+  onSubmit() {
+    if (!this.emailInvalid && !this.passwordInvalid && !this.passwordsDoNotMatch && !this.usernameInvalid) {
+      this.firebaseService.register(this.email, this.password)
+        .then(() => {
+          this.router.navigate(['/login']);
+        })
+        .catch(error => {
+          console.error('Error al registrar', error);
+        });
     }
   }
 }

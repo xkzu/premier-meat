@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserStateService } from './services/user-state.service';
+import { FirebaseService } from './services/firebase.service';
+import { User } from './models/user.model';
 
 @Component({
   selector: 'app-root',
@@ -9,33 +9,25 @@ import { UserStateService } from './services/user-state.service';
 })
 export class AppComponent implements OnInit {
   title = 'premier-meat';
-  currentUser: any = null;
+  currentUser: User | null = null;
 
-  constructor(private router: Router, private userStateService: UserStateService) {}
+  constructor(private firebaseService: FirebaseService) {}
 
   ngOnInit(): void {
-    this.userStateService.currentUser$.subscribe(user => {
-      this.currentUser = user;
+    this.firebaseService.getAuthState().subscribe(user => {
+      if (user) {
+        this.firebaseService.getUserData(user.uid).subscribe(userData => {
+          this.currentUser = userData;
+        });
+      } else {
+        this.currentUser = null;
+      }
     });
-
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const adminUser = users.find((user: any) => user.role === 'admin');
-
-    if (!adminUser) {
-      const admin = {
-        username: 'admin',
-        email: 'admin@premiermeat.com',
-        password: 'admin123',
-        role: 'admin'
-      };
-
-      users.push(admin);
-      localStorage.setItem('users', JSON.stringify(users));
-    }
   }
 
-  logout(): void {
-    this.userStateService.clearCurrentUser();
-    this.router.navigate(['/home']);
+  logout() {
+    this.firebaseService.logout().then(() => {
+      this.currentUser = null;
+    });
   }
 }
