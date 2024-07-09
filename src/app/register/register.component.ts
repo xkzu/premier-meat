@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FirebaseService } from '../services/firebase.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -9,17 +10,18 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
   email: string = '';
+  username: string = '';
   password: string = '';
   confirmPassword: string = '';
-
   emailInvalid: boolean = false;
   passwordInvalid: boolean = false;
   passwordsDoNotMatch: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private firebaseService: FirebaseService, private router: Router) {}
 
   validateEmail(): void {
-    this.emailInvalid = !this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.emailInvalid = !emailPattern.test(this.email);
   }
 
   validatePassword(): void {
@@ -27,23 +29,27 @@ export class RegisterComponent {
     this.passwordsDoNotMatch = this.password !== this.confirmPassword;
   }
 
-  onSubmit(form: NgForm): void {
-    this.validateEmail();
-    this.validatePassword();
-
-    if (!this.emailInvalid && !this.passwordInvalid && !this.passwordsDoNotMatch) {
-      // Guardar el usuario y redirigir
-      let users = JSON.parse(localStorage.getItem('users') || '[]');
-      users.push({
-        email: this.email,
-        password: this.password,
-        role: 'user'
-      });
-      localStorage.setItem('users', JSON.stringify(users));
-      alert('Registro exitoso. Ahora puede iniciar sesión.');
-      this.router.navigate(['/login']);
+  onSubmit(registerForm: NgForm): void {
+    if (registerForm.valid && !this.emailInvalid && !this.passwordInvalid && !this.passwordsDoNotMatch) {
+      this.firebaseService.register(this.email, this.password)
+        .then(userCredential => {
+          const uid = userCredential.user?.uid;
+          if (uid) {
+            // Guardar en Firestore
+            this.firebaseService.saveUserData(uid, this.email, this.username)
+              .then(() => {
+                this.router.navigate(['/login']);
+              })
+              .catch(error => {
+                console.error('Error al guardar en Firestore', error);
+              });
+          }
+        })
+        .catch((error: any) => {
+          console.error('Error al registrar', error);
+        });
     } else {
-      alert('Por favor, corrija los errores en el formulario.');
+      alert('Por favor complete todos los campos correctamente.');
     }
   }
 }
