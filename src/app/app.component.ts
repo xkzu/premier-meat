@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { FirebaseService } from './services/firebase.service';
 import { User } from './models/user.model';
 
@@ -7,13 +8,11 @@ import { User } from './models/user.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'premier-meat';
   currentUser: User | null = null;
 
-  constructor(private firebaseService: FirebaseService) {}
-
-  ngOnInit(): void {
+  constructor(private firebaseService: FirebaseService, private router: Router) {
     this.firebaseService.getAuthState().subscribe(user => {
       if (user) {
         this.firebaseService.getUserData(user.uid).subscribe(userData => {
@@ -25,9 +24,11 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout(): void {
+  logout() {
     this.firebaseService.logout().then(() => {
-      this.currentUser = null;
+      this.router.navigate(['/home']);
+    }).catch(error => {
+      console.error('Error al cerrar sesión', error);
     });
   }
 }
